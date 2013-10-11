@@ -78,6 +78,11 @@ void read_romfs_task(void *pvParameters)
 	
 	while (1);
 }
+void testing_unit_task (void *pvParameters)
+{
+        char str_tmp[20] = "testing unit task\n";
+		fio_write(1, str_tmp, 19);
+} 
 
 int main()
 {
@@ -87,7 +92,8 @@ int main()
 	
 	fs_init();
 	fio_init();
-	
+ 
+    unsigned long task_priority	;
 	register_romfs("romfs", &_sromfs);
 	
 	/* Create the queue used by the serial task.  Messages for write to
@@ -97,14 +103,17 @@ int main()
 	/* Create a task to output text read from romfs. */
 	xTaskCreate(read_romfs_task,
 	            (signed portCHAR *) "Read romfs",
-	            512 /* stack size */, NULL, tskIDLE_PRIORITY + 2, NULL);
-
+	            512 /* stack size */, NULL, tskIDLE_PRIORITY + 2 , NULL);
+   
+	xTaskCreate(testing_unit_task,
+	            (signed portCHAR *) "testing_unit_task",
+	            512 /* stack size */, NULL, tskIDLE_PRIORITY+3 , NULL);
+    
 	/* Start running the tasks. */
 	vTaskStartScheduler();
 
 	return 0;
 }
-
 void vApplicationTickHook()
 {
 }
