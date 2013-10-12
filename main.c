@@ -7,7 +7,6 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
-#include <string.h>
 
 /* Filesystem includes */
 #include "filesystem.h"
@@ -151,6 +150,14 @@ void int2str(int in , char*out )
   out[number_len] = '\0';
 } 
 
+int strlen(char *str )
+{
+  int i = 0 ;
+  while(str[i]!='\0'){
+	i++;
+  }
+  return i ;  
+}
 void vApplicationTickHook()
 {
 }
