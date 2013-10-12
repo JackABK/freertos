@@ -78,11 +78,15 @@ void read_romfs_task(void *pvParameters)
 	
 	while (1);
 }
+
 void testing_unit_task (void *pvParameters)
 {
         char str_tmp[20] = "testing unit task\n";
 		fio_write(1, str_tmp, 19);
-} 
+}
+
+
+
 
 int main()
 {
@@ -105,11 +109,16 @@ int main()
 	xTaskCreate(testing_unit_task,
 	            (signed portCHAR *) "testing_unit_task",
 	            512 /* stack size */, NULL, tskIDLE_PRIORITY+3 , NULL);
-    
 	/* Start running the tasks. */
 	vTaskStartScheduler();
     
 	return 0;
+}
+
+void my_puts(char *msg)
+{
+  if (!msg) return;
+  fio_write(1 , msg , strlen(msg));
 }
 
 int str2int(char *str)
