@@ -1,5 +1,7 @@
 #define USE_STDPERIPH_DRIVER
-#define FORMAT_CONVERT_ERROR -1
+#define FORMAT_CONVERT_ERROR -1  
+#define STDOUT_FROM_UART 1  //Write buffer to fd 1 (stdout, through uart)
+
 #include "stm32f10x.h"
 
 /* Scheduler includes. */
@@ -82,7 +84,7 @@ void read_romfs_task(void *pvParameters)
 void testing_unit_task (void *pvParameters)
 {
         char str_tmp[20] = "testing unit task\n";
-		fio_write(1, str_tmp, 19);
+		fio_write(STDOUT_FROM_UART, str_tmp, 19);
 }
 
 
@@ -118,7 +120,7 @@ int main()
 void my_puts(char *msg)
 {
   if (!msg) return;
-  fio_write(1 , msg , strlen(msg));
+  fio_write(STDOUT_FROM_UART , msg , strlen(msg));
 }
 
 int str2int(char *str)
