@@ -1,4 +1,5 @@
 #define USE_STDPERIPH_DRIVER
+#define FORMAT_CONVERT_ERROR -1
 #include "stm32f10x.h"
 
 /* Scheduler includes. */
@@ -92,9 +93,7 @@ int main()
 	
 	fs_init();
 	fio_init();
- 
 	register_romfs("romfs", &_sromfs);
-	
 	/* Create the queue used by the serial task.  Messages for write to
 	 * the RS232. */
 	vSemaphoreCreateBinary(serial_tx_wait_sem);
@@ -119,8 +118,9 @@ int str2int(char *str)
  int i=0,tmp=0;
  while(str[i]!='\0')
  {
-  if(str[i]>='0'&&str[i]<='9')
-   tmp=tmp*10+(str[i]-'0');
+  if(str[i]>='0'&&str[i]<='9')  tmp=tmp*10+(str[i]-'0');
+  else return FORMAT_CONVERT_ERROR; 
+
   i++;
  }
  return tmp;
