@@ -85,6 +85,15 @@ void send_byte(char ch)
 	USART_SendData(USART2, ch);
 	USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
 }
+char receive_byte()
+{
+    serial_ch_msg msg ; 
+
+    /* Wait for a byte to be queued by the receive interrupts handler. */
+    while (!xQueueReceive(serial_rx_queue, &msg, portMAX_DELAY));
+    return msg.ch ; 
+
+}
 void read_romfs_task(void *pvParameters)
 {
 	char buf[128];
