@@ -19,6 +19,8 @@ extern const char _sromfs;
 static void setup_hardware();
 
 volatile xSemaphoreHandle serial_tx_wait_sem = NULL;
+volatile xQueueHandle serial_rx_queue = NULL ; 
+volatile xQueueHandle serial_str_queue = NULL ; 
 
 /* Queue structure used for passing messages. */
 typedef struct {
@@ -106,8 +108,16 @@ int main()
 
 	/* Create the queue used by the serial task.  Messages for write to
 	 * the RS232. 
+	 * the queue create usage : 
+     * xQueueHandle xQueueCreate xQueueCreate
+                                   (
+                                     unsigned portBASE_TYPE uxQueueLength , 
+                                     unsigned portBASE_TYPE uxItemSize
+                                   );
      */
 	vSemaphoreCreateBinary(serial_tx_wait_sem);
+	serial_str_queue = xQueueCreate(10, sizeof(serial_str_msg));
+    serial_rx_queue = xQueueCreate(1, sizeof(char));
 
 	/* Create a task to output text read from romfs. */
 	//xTaskCreate(read_romfs_task,
