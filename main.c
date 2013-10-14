@@ -177,21 +177,6 @@ void int2str(int in , char*out )
 
   out[number_len] = '\0';
 } 
-
-int strlen(char *str )
-{
-  int i = 0 ;
-  while(str[i]!='\0'){
-	i++;
-  }
-  return i ;  
-}
-int strcmp(const char* s1, const char* s2)
-{
-    while(*s1 && (*s1==*s2))
-        s1++,s2++;
-    return *(const unsigned char*)s1-*(const unsigned char*)s2;
-}
 void vApplicationTickHook()
 {
 }
