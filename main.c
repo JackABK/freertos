@@ -20,6 +20,15 @@ static void setup_hardware();
 
 volatile xSemaphoreHandle serial_tx_wait_sem = NULL;
 
+/* Queue structure used for passing messages. */
+typedef struct {
+    char str[100];
+} serial_str_msg;
+
+/* Queue structure used for passing characters. */
+typedef struct {
+    char ch;
+} serial_ch_msg;
 
 /* IRQ handler to handle USART2 interruptss (both transmit and receive
  * interrupts). */
@@ -44,7 +53,6 @@ void USART2_IRQHandler()
 		 */
 		while(1);
 	}
-
 	if (xHigherPriorityTaskWoken) {
 		taskYIELD();
 	}
@@ -64,7 +72,6 @@ void send_byte(char ch)
 	USART_SendData(USART2, ch);
 	USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
 }
-
 void read_romfs_task(void *pvParameters)
 {
 	char buf[128];
@@ -83,13 +90,10 @@ void read_romfs_task(void *pvParameters)
 
 void testing_unit_task (void *pvParameters)
 {
+        char ch;
         char str_tmp[20] = "testing unit task\n";
 		fio_write(STDOUT_FROM_UART, str_tmp, 19);
 }
-
-
-
-
 int main()
 {
 	init_rs232();
@@ -99,18 +103,22 @@ int main()
 	fs_init();
 	fio_init();
 	register_romfs("romfs", &_sromfs);
+
 	/* Create the queue used by the serial task.  Messages for write to
-	 * the RS232. */
+	 * the RS232. 
+     */
 	vSemaphoreCreateBinary(serial_tx_wait_sem);
 
 	/* Create a task to output text read from romfs. */
-	xTaskCreate(read_romfs_task,
-	            (signed portCHAR *) "Read romfs",
-	            512 /* stack size */, NULL, tskIDLE_PRIORITY + 2 , NULL);
-   
+	//xTaskCreate(read_romfs_task,
+	//            (signed portCHAR *) "Read romfs",
+	//            512 /* stack size */, NULL, tskIDLE_PRIORITY + 2 , NULL);
+    
+    /*Create a task to testing_unit_task*/ 
 	xTaskCreate(testing_unit_task,
 	            (signed portCHAR *) "testing_unit_task",
 	            512 /* stack size */, NULL, tskIDLE_PRIORITY+3 , NULL);
+
 	/* Start running the tasks. */
 	vTaskStartScheduler();
     
