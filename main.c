@@ -94,22 +94,6 @@ char receive_byte()
     return msg.ch ; 
 
 }
-void read_romfs_task(void *pvParameters)
-{
-	char buf[128];
-	size_t count;
-	int fd = fs_open("/romfs/test.txt", 0, O_RDONLY);
-	do {
-		//Read from /romfs/test.txt to buffer
-		count = fio_read(fd, buf, sizeof(buf));
-		
-		//Write buffer to fd 1 (stdout, through uart)
-		fio_write(1, buf, count);
-	} while (count);
-	
-	while (1);
-}
-
 void testing_unit_task (void *pvParameters)
 {
         char ch;
@@ -139,11 +123,6 @@ int main()
 	serial_str_queue = xQueueCreate(10, sizeof(serial_str_msg));
     serial_rx_queue = xQueueCreate(1, sizeof(char));
 
-	/* Create a task to output text read from romfs. */
-	//xTaskCreate(read_romfs_task,
-	//            (signed portCHAR *) "Read romfs",
-	//            512 /* stack size */, NULL, tskIDLE_PRIORITY + 2 , NULL);
-    
     /*Create a task to testing_unit_task*/ 
 	xTaskCreate(testing_unit_task,
 	            (signed portCHAR *) "testing_unit_task",
