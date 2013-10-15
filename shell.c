@@ -1,5 +1,8 @@
-#include "string-util.h"
 #include "fio.h"
+#include "string-util.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "clib.h"
 void shell_task(void *pvParameters)
 {
     //serial_str_msg msg;

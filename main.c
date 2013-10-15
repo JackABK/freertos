@@ -1,6 +1,4 @@
 #define USE_STDPERIPH_DRIVER
-#define FORMAT_CONVERT_ERROR -1  
-#define STDOUT_FROM_UART 1  //Write buffer to fd 1 (stdout, through uart)
 
 #include "stm32f10x.h"
 
@@ -14,6 +12,7 @@
 #include "filesystem.h"
 #include "fio.h"
 #include "shell.h"
+#include "clib.h"
 extern const char _sromfs;
 
 static void setup_hardware();
@@ -105,7 +104,6 @@ int main()
 	init_rs232();
 	enable_rs232_interrupts();
 	enable_rs232();
-	
 	fs_init();
 	fio_init();
 	register_romfs("romfs", &_sromfs);
@@ -139,50 +137,6 @@ int main()
     
 	return 0;
 }
-
-void my_puts(char *msg)
-{
-  if (!msg) return;
-  fio_write(STDOUT_FROM_UART , msg , strlen(msg));
-}
-
-int str2int(char *str)
-{
- int i=0,tmp=0;
- while(str[i]!='\0')
- {
-  if(str[i]>='0'&&str[i]<='9')  tmp=tmp*10+(str[i]-'0');
-  else return FORMAT_CONVERT_ERROR; 
-
-  i++;
- }
- return tmp;
-}
-
-void int2str(int in , char*out )
-{
-  int i, number_len=0; 
-  char out_tmp[10];
-
-  if(in == 0)
-  {
-    out[0] = '0';
-    out[1] = '\0';
-    return ;
-  }
-
-  while(in > 0){
-     out_tmp[number_len] = '0' +  (in % 10);
-     in /= 10;
-     number_len++;     
-  }  
-  
-  for(i=0; i<number_len; i++){
-     out[i] = out_tmp[number_len-1-i] ;
-  }    
-
-  out[number_len] = '\0';
-} 
 void vApplicationTickHook()
 {
 }
