@@ -7,10 +7,16 @@
 #include "osdebug.h"
 #include "hash-djb2.h"
 
+/*in the main.c*/
+extern char receive_byte(); 
+
 static struct fddef_t fio_fds[MAX_FDS];
 
 static ssize_t stdin_read(void * opaque, void * buf, size_t count) {
-    return 0;
+	int i ;
+	char * data =buf;
+	for (i=0; i<count ; i++) data[i] = receive_byte();
+    return count;
 }
 
 static ssize_t stdout_write(void * opaque, const void * buf, size_t count) {

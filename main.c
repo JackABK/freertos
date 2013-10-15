@@ -13,7 +13,7 @@
 /* Filesystem includes */
 #include "filesystem.h"
 #include "fio.h"
-
+#include "shell.h"
 extern const char _sromfs;
 
 static void setup_hardware();
@@ -124,9 +124,15 @@ int main()
     serial_rx_queue = xQueueCreate(1, sizeof(char));
 
     /*Create a task to testing_unit_task*/ 
-	xTaskCreate(testing_unit_task,
-	            (signed portCHAR *) "testing_unit_task",
-	            512 /* stack size */, NULL, tskIDLE_PRIORITY+3 , NULL);
+	//xTaskCreate(testing_unit_task,
+	//            (signed portCHAR *) "Testing_unit_task",
+	//            512 /* stack size */, NULL, tskIDLE_PRIORITY+3 , NULL);
+
+	/*Create a task to shell task*/
+	xTaskCreate(shell_task,
+	            (signed portCHAR *) "Shell_task",
+	            512 /* stack size */, NULL, tskIDLE_PRIORITY+10 , NULL);
+
 
 	/* Start running the tasks. */
 	vTaskStartScheduler();
