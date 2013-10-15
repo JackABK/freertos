@@ -42,7 +42,7 @@ void shell_task(void *pvParameters)
 		 proc_cmd(str);
     }
 }   
-void proc_cmd(char *cmd)                                                     {
+void proc_cmd(char *cmd){
   int i;
   char string_tmp[10];
   if (!strncmp(cmd , "help",4)){
@@ -60,7 +60,7 @@ void proc_cmd(char *cmd)                                                     {
      // print_msg("Please input ");
     }
   }
-  else if(!strncmp(cmd ,"hello" , 4)){
+  else if(!strncmp(cmd ,"hello" , 5)){
     my_puts("Hello! this is JackABK Homework\r\n");
   }
   else{
