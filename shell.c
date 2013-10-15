@@ -1,3 +1,4 @@
+#include "string-util.h"
 #include "fio.h"
 void shell_task(void *pvParameters)
 {
@@ -37,7 +38,33 @@ void shell_task(void *pvParameters)
         /* Once we are done building the response string, queue the
          * response to be sent to the RS232 port.
          */
-		my_puts("\r\n");
-        //while (!xQueueSendToBack(serial_str_queue, &msg, portMAX_DELAY));
+	  	 my_puts("\r\n");
+		 proc_cmd(str);
     }
 }   
+void proc_cmd(char *cmd)                                                     {
+  int i;
+  char string_tmp[10];
+  if (!strncmp(cmd , "help",4)){
+    my_puts("\rhelp -- Display all command explanation\n");
+    my_puts("\recho -- Output the string\n");
+    my_puts("\rhello -- Display 'Hello JackABK' \n");
+    my_puts("\rps -- Display all tasks\r\n");
+  }
+  else if(!strncmp(cmd , "echo" , 4)){
+    if( (!strncmp(cmd,"echo ",5) && (cmd[5]!=' '))){
+      my_puts(&cmd[5]);
+      my_puts("\r\n");
+    }
+    else{
+     // print_msg("Please input ");
+    }
+  }
+  else if(!strncmp(cmd ,"hello" , 4)){
+    my_puts("Hello! this is JackABK Homework\r\n");
+  }
+  else{
+   // my_puts(cmd);
+    my_puts("command not found !!\r\n");
+  }
+}
