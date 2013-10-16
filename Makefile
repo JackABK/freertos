@@ -51,7 +51,9 @@ main.bin: test-romfs.o main.c
 		fio.c \
 		\
 		osdebug.c \
-		string-util.c \
+		string.c \
+		shell.c \
+		clib.c \
 		\
 		main.c
 	$(CROSS_COMPILE)ld -Tmain.ld -nostartfiles -o main.elf \
@@ -72,7 +74,9 @@ main.bin: test-romfs.o main.c
 		romfs.o hash-djb2.o filesystem.o fio.o \
 		\
 		osdebug.o \
-		string-util.o \
+		string.o \
+		shell.o  \
+		clib.o \
 		\
 		main.o
 	$(CROSS_COMPILE)objcopy -Obinary main.elf main.bin
