@@ -1,8 +1,15 @@
 #ifndef __ERRNO_H__
 #define __ERRNO_H__
-/* this is refer to Linux errno.h - C Error Codes in Linux
+
+/* this errno.h refer to Linux errno.h - C Error Codes in Linux
  * http://www.virtsync.com/c-error-codes-include-errno
  */
+
+/*Declare the 'errno' variable.*/
+#ifndef errno
+extern int errno;
+#endif                                                                          
+
 #include <errno-base.h>
 #define EDEADLK     35  /* Resource deadlock would occur */
 #define ENAMETOOLONG    36  /* File name too long */
