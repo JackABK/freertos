@@ -3,6 +3,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "clib.h"
+#include "errno.h"
 void shell_task(void *pvParameters)
 {
     //serial_str_msg msg;
@@ -70,4 +71,10 @@ void proc_cmd(char *cmd){
    // my_puts(cmd);
     my_puts("command not found !!\r\n");
   }
+}
+void ps_cmd(int argc , char *argv[])
+{
+	char buf[1024];
+	vTaskList(buf);
+	printf("\r\n%s\r\n",buf);
 }
