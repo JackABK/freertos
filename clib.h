@@ -7,4 +7,5 @@ int str2int(char *str);
 void int2str(int in , char*out );
 char *itoa(int i, unsigned int base);
 char *utoa(unsigned int i, unsigned int base);
+int printf(const char *format, ...);
 #endif

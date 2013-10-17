@@ -72,3 +72,69 @@ char *utoa(unsigned int num, unsigned int base){
         buf[i] = "0123456789ABCDEF" [num % base];
     return buf+i+1;
 } 
+/*this print can common used for printf and sprintf*/
+static int print(char * dest , const char *format, va_list args )
+{
+  int int_tmp , i;
+  char ch_tmp[2] = {0 , 0}; /*second byte is as a stop character */
+  char *str_tmp=0;
+  char str_out_buf[100];
+
+    for(i=0; format[i]!=0; i++){
+        if(format[i]=='%'){
+            switch(format[i+1]){
+                case 'c':
+                case 'C':
+                    {
+                        ch_tmp[0]    = (char) va_arg(args,int);
+                        str_tmp = ch_tmp;
+                    } 
+                    break;
+                case 'd':
+                case 'D':
+                    {
+                        int_tmp = va_arg(args, int);
+                        str_tmp = itoa(int_tmp,10);
+                    }
+                    break;  
+                case 'x':
+                case 'X':
+                case 'S':
+                case 's':
+                    {
+                        str_tmp = va_arg(args, char *);
+                    }
+                    break;
+                case '%':
+                    send_byte('%'); break;
+                default:
+                    {   
+                    
+                    }
+            }
+          /* next to char */
+          i++;
+        }
+        else{
+             ch_tmp[0] = format[i];
+             str_tmp = ch_tmp;
+        }
+      my_puts(str_tmp);
+      strcat(dest , str_tmp);
+    }
+    va_end(args);
+	return i ;
+}
+int printf(const char *format, ...)
+{
+    va_list args;
+    va_start( args, format );
+    /*first argv is 0 since dont return string buffer*/
+    return print( 0 , format, args );
+}
+int sprintf(char *dest , const char *format , ...)
+{
+    va_list args;
+    va_start( args, format );
+    return print( &dest, format, args );
+}
