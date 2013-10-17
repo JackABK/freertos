@@ -5,4 +5,6 @@
 void my_puts(char *msg);
 int str2int(char *str);
 void int2str(int in , char*out );
+char *itoa(int i, unsigned int base);
+char *utoa(unsigned int i, unsigned int base);
 #endif
