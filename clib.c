@@ -1,5 +1,7 @@
 #include "clib.h"
 #include <stdarg.h>  /*need to using the va_list and some var.*/
+#define ITOA_FLAG 1
+#define UTOA_FLAG 0
 void my_puts(char *msg)
 {
   if (!msg) return;
@@ -43,35 +45,38 @@ void int2str(int in , char*out )
 
   out[number_len] = '\0';
 }
+char *itoa_utoa_str_conv(unsigned int num , char * buf , unsigned int base , int flags)
+{
+	int i, negative=0;
+
+	if (flags==ITOA_FLAG) {
+		negative= (int)num<0 ;    
+        if(negative) num = -(int)num;
+	}
+	/*UTOA_FLAG is dont need to set*/
+
+        /******common itoa and utoa*******/
+		if(num==0){
+    	    buf[30]='0';
+        	return &buf[30];
+    	}	
+		for(i=30; i>=0&&num; --i, num/=base)
+	        buf[i] = "0123456789ABCDEF" [num % base];
+		if(negative){
+   		     buf[i]='-';
+   	    	 --i;
+   		}
+	return buf+i+1;
+}
 char *itoa(int num, unsigned int base){
     static char buf[32]={0};
-    int i;
-    if(num==0){
-        buf[30]='0';
-        return &buf[30];
-    }
-    int negative=(num<0);
-    if(negative) num=-num;
-    for(i=30; i>=0&&num; --i, num/=base)
-        buf[i] = "0123456789ABCDEF" [num % base];
-    if(negative){
-        buf[i]='-';
-        --i;
-    }
-    return buf+i+1;
+    return itoa_utoa_str_conv(num , buf , base ,ITOA_FLAG);	
 }
-
 char *utoa(unsigned int num, unsigned int base){
     static char buf[32]={0};
-    int i;
-    if(num==0){
-        buf[30]='0';
-        return &buf[30];
-    }
-    for(i=30; i>=0&&num; --i, num/=base)
-        buf[i] = "0123456789ABCDEF" [num % base];
-    return buf+i+1;
+    return itoa_utoa_str_conv(num , buf , base , UTOA_FLAG);	
 } 
+
 /*this print can common used for printf and sprintf*/
 static int print(char * dest , const char *format, va_list args )
 {
