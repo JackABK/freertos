@@ -4,6 +4,7 @@
 #include "task.h"
 #include "clib.h"
 #include "errno.h"
+#define BACKSPACE (127)
 void shell_task(void *pvParameters)
 {
     //serial_str_msg msg;
@@ -31,6 +32,12 @@ void shell_task(void *pvParameters)
                 /* Otherwise, add the character to the
                  * response string. */
             }
+			else if (ch == BACKSPACE){ /*backspace*/
+				if (curr_char>0) {
+					curr_char--;
+			    	printf("\b \b");
+				}
+			}
             else {
                 str[curr_char++] = ch;
 				/*immediate output ch to stdout*/
@@ -70,6 +77,9 @@ void proc_cmd(char *cmd){
   else{
    // my_puts(cmd);
     my_puts("command not found !!\r\n");
+	int num1 = -3;
+	int num2 = 0xffffffff ; 
+	printf("%s" , utoa( num2 , 10));
   }
 }
 void ps_cmd(int argc , char *argv[])
