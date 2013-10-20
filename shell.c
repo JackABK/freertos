@@ -77,9 +77,6 @@ void proc_cmd(char *cmd){
   else{
    // my_puts(cmd);
     my_puts("command not found !!\r\n");
-	int num1 = -3;
-	int num2 = 0xffffffff ; 
-	printf("%s" , utoa( num2 , 10));
   }
 }
 void ps_cmd(int argc , char *argv[])
