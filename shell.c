@@ -5,6 +5,65 @@
 #include "clib.h"
 #include "errno.h"
 #define BACKSPACE (127)
+typedef struct 
+{
+	char *name;
+	char *desc;
+	void (*cmd_func_handler)(void);	
+} cmd_list;
+
+/*pre-define avilable commands list*/
+static void help_menu(void);
+static void ps_cmd(void);
+static void ls_cmd(void);
+static void cat_cmd(void);
+
+/*command list table*/
+static cmd_list available_cmds[] = {
+	{
+		.name = "help" ,
+		.desc = "help menu:" , 
+		.cmd_func_handler = help_menu 
+	},
+	{
+		.name = "ps" ,
+		.desc = "Run the ps command" , 
+		.cmd_func_handler = ps_cmd 
+
+	}, 
+	{
+		.name = "ls" ,
+		.desc = "list directory contents" , 
+		.cmd_func_handler = ls_cmd
+	},
+	{
+		.name = "cat" ,
+		.desc = "concatenate files and print on the standard output" ,
+		.cmd_func_handler = cat_cmd
+	}
+};
+static void help_menu(void)
+{
+	int i;
+	my_puts("available command list :\r\n");
+	for (i = 0; i < sizeof(available_cmds)/sizeof(cmd_list); i++) {
+		printf("%s\t\t%s\r\n",available_cmds[i].name,available_cmds[i].desc);
+	}
+}
+void ps_cmd(void)
+{
+	char buf[1024];
+	vTaskList(buf);
+	printf("\r\n%s\r\n",buf);
+}
+void ls_cmd(void)
+{
+	/*will complete*/
+}
+void cat_cmd(void)
+{
+	/*will complete*/
+}
 void shell_task(void *pvParameters)
 {
     //serial_str_msg msg;
@@ -54,34 +113,14 @@ void shell_task(void *pvParameters)
     }
 }   
 void proc_cmd(char *cmd){
-  int i;
-  char string_tmp[10];
-  if (!strncmp(cmd , "help",4)){
-    my_puts("\rhelp -- Display all command explanation\n");
-    my_puts("\recho -- Output the string\n");
-    my_puts("\rhello -- Display 'Hello JackABK' \n");
-    my_puts("\rps -- Display all tasks\r\n");
-  }
-  else if(!strncmp(cmd , "echo" , 4)){
-    if( (!strncmp(cmd,"echo ",5) && (cmd[5]!=' '))){
-      my_puts(&cmd[5]);
-      my_puts("\r\n");
+    int i;
+    char string_tmp[10];
+	for (i = 0; i < sizeof(available_cmds)/sizeof(cmd_list); i++) {          
+		if(strncmp(cmd, available_cmds[i].name , strlen(available_cmds[i].name)) == 0){
+			available_cmds[i].cmd_func_handler();
+			return;
+		}      
     }
-    else{
-     // print_msg("Please input ");
-    }
-  }
-  else if(!strncmp(cmd ,"hello" , 5)){
-    my_puts("Hello! this is JackABK Homework\r\n");
-  }
-  else{
-   // my_puts(cmd);
+	/*not found the command from cmd_list*/
     my_puts("command not found !!\r\n");
-  }
-}
-void ps_cmd(int argc , char *argv[])
-{
-	char buf[1024];
-	vTaskList(buf);
-	printf("\r\n%s\r\n",buf);
 }
