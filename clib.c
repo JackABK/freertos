@@ -1,5 +1,6 @@
 #include "clib.h"
 #include <stdarg.h>  /*need to using the va_list and some var.*/
+#include "string.h"
 #define ITOA_FLAG 1
 #define UTOA_FLAG 0
 void my_puts(char *msg)
@@ -135,8 +136,8 @@ static int print(char * dest , const char *format, va_list args )
              ch_tmp[0] = format[i];
              str_tmp = ch_tmp;
         }
-      my_puts(str_tmp);
-      strcat(dest , str_tmp);
+        my_puts(str_tmp);
+        strcat(dest , str_tmp);
     }
     va_end(args);
 	return i ;

@@ -4,6 +4,7 @@
 #include "task.h"
 #include "clib.h"
 #include "errno.h"
+#include "memtest.h"
 #define BACKSPACE (127)
 typedef struct 
 {
@@ -17,6 +18,7 @@ static void help_menu(void);
 static void ps_cmd(void);
 static void ls_cmd(void);
 static void cat_cmd(void);
+void memtest(void);
 
 /*command list table*/
 static cmd_list available_cmds[] = {
@@ -40,6 +42,11 @@ static cmd_list available_cmds[] = {
 		.name = "cat" ,
 		.desc = "concatenate files and print on the standard output" ,
 		.cmd_func_handler = cat_cmd
+	},
+	{
+		.name = "memtest" ,
+		.desc = "malloc testing" ,
+		.cmd_func_handler = memtest
 	}
 };
 static void help_menu(void)
@@ -53,8 +60,9 @@ static void help_menu(void)
 void ps_cmd(void)
 {
 	char buf[1024];
+	printf("Task List :\n\r");
 	vTaskList(buf);
-	printf("\r\n%s\r\n",buf);
+	printf("\n\r%s\n\r",buf);
 }
 void ls_cmd(void)
 {
