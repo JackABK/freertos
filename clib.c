@@ -104,17 +104,30 @@ static int print(char * dest , const char *format, va_list args )
                     break;  
                 case 'x':
                 case 'X':
+					{
+						int_tmp = va_arg(args , int);
+						str_tmp = itoa(int_tmp , 16);
+					}
+					break;
                 case 'S':
                 case 's':
                     {
                         str_tmp = va_arg(args, char *);
                     }
                     break;
+				case 'u':
+				case 'U':
+					{
+						int_tmp = va_arg(args , int);
+						str_tmp = utoa((unsigned int)int_tmp , 10);	
+					}
+					break;
                 case '%':
                     send_byte('%'); break;
                 default:
                     {   
-                    
+                   		ch_tmp[0] = format[i];
+						str_tmp = ch_tmp; 
                     }
             }
           /* next to char */
