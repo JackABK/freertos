@@ -122,8 +122,6 @@ static int print(char * dest , const char *format, va_list args )
 						str_tmp = utoa((unsigned int)int_tmp , 10);	
 					}
 					break;
-                case '%':
-                    send_byte('%'); break;
                 default:
                     {   
                    		ch_tmp[0] = format[i];
