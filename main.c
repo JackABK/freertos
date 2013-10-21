@@ -7,12 +7,16 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
-
 /* Filesystem includes */
 #include "filesystem.h"
 #include "fio.h"
 #include "shell.h"
 #include "clib.h"
+
+/*The task priority*/
+#define SHELL_TASK_PRIORITY                (tskIDLE_PRIORITY + 3)
+#define TEST_UNIT_TASK_PRIORITY            (tskIDLE_PRIORITY+2) 
+
 extern const char _sromfs;
 
 static void setup_hardware();
@@ -124,12 +128,12 @@ int main()
     /*Create a task to testing_unit_task*/ 
 	//xTaskCreate(testing_unit_task,
 	//            (signed portCHAR *) "Testing_unit_task",
-	//            512 /* stack size */, NULL, tskIDLE_PRIORITY+3 , NULL);
+	//            512 /* stack size */, NULL, TEST_UNIT_TASK_PRIORITY , NULL);
 
 	/*Create a task to shell task*/
 	xTaskCreate(shell_task,
 	            (signed portCHAR *) "Shell_task",
-	            512 /* stack size */, NULL, tskIDLE_PRIORITY+10 , NULL);
+	            512 /* stack size */, NULL, SHELL_TASK_PRIORITY , NULL);
 
 
 	/* Start running the tasks. */
