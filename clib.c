@@ -1,8 +1,12 @@
 #include "clib.h"
 #include <stdarg.h>  /*need to using the va_list and some var.*/
 #include "string.h"
-#define ITOA_FLAG 1
-#define UTOA_FLAG 0
+
+/*num_to_str to used flags*/
+enum sign_type_T {
+	SIGNED_INT,
+	UNSIGNED_INT	
+};
 void my_puts(char *msg)
 {
   if (!msg) return;
@@ -46,17 +50,17 @@ void int2str(int in , char*out )
 
   out[number_len] = '\0';
 }
-char *itoa_utoa_str_conv(unsigned int num , char * buf , unsigned int base , int flags)
+char *num_to_str(unsigned int num , char * buf , unsigned int base , int flags)
 {
 	int i, negative=0;
 
-	if (flags==ITOA_FLAG) {
+	if (flags==SIGNED_INT) {
 		negative= (int)num<0 ;    
         if(negative) num = -(int)num;
 	}
-	/*UTOA_FLAG is dont need to set*/
+	/*UNSIGNED_INT is dont need to setting anything*/
 
-        /******common itoa and utoa*******/
+        /******common part*******/
 		if(num==0){
     	    buf[30]='0';
         	return &buf[30];
@@ -71,12 +75,16 @@ char *itoa_utoa_str_conv(unsigned int num , char * buf , unsigned int base , int
 }
 char *itoa(int num, unsigned int base){
     static char buf[32]={0};
-    return itoa_utoa_str_conv(num , buf , base ,ITOA_FLAG);	
+    return num_to_str(num , buf , base ,SIGNED_INT);	
 }
 char *utoa(unsigned int num, unsigned int base){
     static char buf[32]={0};
-    return itoa_utoa_str_conv(num , buf , base , UTOA_FLAG);	
+    return num_to_str(num , buf , base , UNSIGNED_INT);	
 } 
+char *addrtoa(long int addr){
+	static char buf[32]={0};
+	return num_to_str(addr , buf , 16 , UNSIGNED_INT);
+}
 
 /*this print can common used for printf and sprintf*/
 static int print(char * dest , const char *format, va_list args )
@@ -121,6 +129,14 @@ static int print(char * dest , const char *format, va_list args )
 					{
 						int_tmp = va_arg(args , int);
 						str_tmp = utoa((unsigned int)int_tmp , 10);	
+					}
+					break;
+				case 'p':
+				case 'P':
+					{
+						int_tmp = va_arg(args , long int);
+						str_tmp = addrtoa((long int)int_tmp);	
+						my_puts("0x"); /*pre-print hex format*/ 
 					}
 					break;
                 default:
