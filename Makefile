@@ -56,6 +56,7 @@ main.bin: test-romfs.o main.c
 		shell.c \
 		clib.c \
 		memtest.c \
+		filedump.c \
 		main.c
 	$(CROSS_COMPILE)ld -Tmain.ld -nostartfiles -o main.elf \
 		core_cm3.o \
@@ -79,6 +80,7 @@ main.bin: test-romfs.o main.c
 		shell.o  \
 		clib.o \
 		memtest.o \
+		filedump.o \
 		\
 		main.o
 	$(CROSS_COMPILE)objcopy -Obinary main.elf main.bin
