@@ -50,7 +50,7 @@ static int prng(void)
     return lfsr & 0xffff;
 }
 
-void memtest(void)
+void memtest_cmd(void)
 {
     int i, size;
     char *p;
