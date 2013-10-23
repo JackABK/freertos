@@ -1,10 +1,12 @@
 #include "fio.h"
+#include <stddef.h>
 #include "string.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "clib.h"
 #include "errno.h"
 #include "memtest.h"
+#include "filedump.h"
 #define BACKSPACE (127)
 typedef struct 
 {
@@ -14,42 +16,26 @@ typedef struct
 } cmd_list;
 
 /*pre-define avilable commands list*/
-static void help_menu(void);
+static void help_cmd(void);
 static void ps_cmd(void);
 static void ls_cmd(void);
-static void cat_cmd(void);
-void memtest(void);
+static void cat_cmd(int argc , char * argv[]);
+void memtest_cmd(void);
 
-/*command list table*/
+/* using preprocessor to beautify the command , refer to: 
+ * 1.http://gcc.gnu.org/onlinedocs/cpp/Stringification.html 
+ * 2.http://stackoverflow.com/questions/216875/in-macros/216912
+*/
+#define DECLARE_COMMAND(n, d) {.name=#n, .cmd_func_handler=n ## _cmd, .desc=d}
 static cmd_list available_cmds[] = {
-	{
-		.name = "help" ,
-		.desc = "help menu:" , 
-		.cmd_func_handler = help_menu 
-	},
-	{
-		.name = "ps" ,
-		.desc = "Run the ps command" , 
-		.cmd_func_handler = ps_cmd 
-
-	}, 
-	{
-		.name = "ls" ,
-		.desc = "list directory contents" , 
-		.cmd_func_handler = ls_cmd
-	},
-	{
-		.name = "cat" ,
-		.desc = "concatenate files and print on the standard output" ,
-		.cmd_func_handler = cat_cmd
-	},
-	{
-		.name = "memtest" ,
-		.desc = "malloc testing" ,
-		.cmd_func_handler = memtest
-	}
+	DECLARE_COMMAND(ls,"list directory contents"),
+	DECLARE_COMMAND(ps,"Run the ps command"),
+	DECLARE_COMMAND(cat,"concatenate files and print on the standard output"),
+	DECLARE_COMMAND(help,"help menu"),
+	DECLARE_COMMAND(memtest,"malloc testing")
 };
-static void help_menu(void)
+
+static void help_cmd(void)
 {
 	int i;
 	my_puts("available command list :\r\n");
@@ -68,7 +54,7 @@ void ls_cmd(void)
 {
 	/*will complete*/
 }
-void cat_cmd(void)
+void cat_cmd(int argc , char * argv[])
 {
 	/*will complete*/
 }
