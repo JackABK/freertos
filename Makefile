@@ -26,6 +26,7 @@ main.bin: test-romfs.o main.c
 		-gdwarf-2 -g3 -Wall \
 		-mcpu=cortex-m3 -mthumb \
 		-c \
+		-fno-builtin \
 		\
 		$(CMSIS_LIB)/CoreSupport/core_cm3.c \
 		$(CMSIS_PLAT_SRC)/system_stm32f10x.c \
