@@ -56,7 +56,20 @@ void ls_cmd(void)
 }
 void cat_cmd(int argc , char * argv[])
 {
-	/*will complete*/
+	int argv_index=1;
+	if(argc < 2){
+		printf("Usage: cat <filename>\n\r");
+		return;
+	}
+	for(;;){
+		if(!filedump(argv[argv_index])){
+			printf("%s No such file or directory.\n\r",argv[argv_index]);
+			return;
+		}
+		else{ 
+			argv_index++;
+		}
+	}
 }
 void shell_task(void *pvParameters)
 {
