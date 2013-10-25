@@ -62,11 +62,11 @@ void cat_cmd(int argc , char * argv[])
 		return;
 	}
 	for(;;){
-		if(!filedump(argv[argv_index])){
+		if(filedump(argv[argv_index]) == FILE_DUMP_FAIL){
 			printf("%s No such file or directory.\n\r",argv[argv_index]);
 			return;
 		}
-		else{ 
+		else{ /*FILE_DUMP_SUCCESS*/ 
 			argv_index++;
 		}
 	}
