@@ -20,4 +20,5 @@ int filedump(const char * filename)
     //Write buffer to stdout 
     printf("%s",buf);
   } 
+		return 1;
 }
