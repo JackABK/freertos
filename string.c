@@ -93,7 +93,7 @@ int strncmp(const char *s1 , const char *s2 , size_t n)
 } 
 char *strcat(char *dest, char *src)
 {
-    while(*dest++);
+    while(*dest) dest++;
     while(*dest++ = *src++);
     return dest ;
 }  
